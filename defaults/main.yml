@@ -1,0 +1,24 @@
+---
+# vars file for lthn-legacy
+lethean_rpc_bind_ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+lethean_p2p_bind_ip: "{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}"
+lethean_rpc_bind_port: 48782
+lethean_p2p_bind_port: 48772
+lethean_data_dir: /var/lib/lthn-legacy-chain
+lethean_log_file: /var/log/lthn-legacy-chain-daemon.log
+lethean_log_level: 0
+supervisor_programs:
+  - name: 'lthn-legacy-chain'
+    command: "letheand --confirm-external-bind --p2p-bind-ip={{ lethean_p2p_bind_ip }} --rpc-bind-ip={{ lethean_rpc_bind_ip }} --p2p-bind-port={{ lethean_p2p_bind_port }} --rpc-bind-port={{ lethean_rpc_bind_port }} --data-dir={{ lethean_data_dir }} --log-file={{ lethean_log_file }} --log-level={{ lethean_log_level }}"
+    state: absent
+    configuration: |
+      autostart=true
+      autorestart=true
+      startretries=1
+      startsecs=1
+      redirect_stderr=true
+      stderr_logfile=/var/log/lthn-legacy-chain-err.log
+      stdout_logfile=/var/log/lthn-legacy-chain.log
+      user=root
+      killasgroup=true
+      stopasgroup=true

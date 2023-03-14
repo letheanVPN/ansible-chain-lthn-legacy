@@ -1,0 +1,20 @@
+supervisor_programs:
+  - name: 'lthn-legacy-chain'
+    command: "letheand --confirm-external-bind --p2p-bind-ip={{ lethean_p2p_bind_ip }} --rpc-bind-ip={{ lethean_rpc_bind_ip }} --p2p-bind-port={{ lethean_p2p_bind_port }} --rpc-bind-port={{ lethean_rpc_bind_port }} --data-dir={{ lethean_data_dir }} --log-file={{ lethean_log_file }} --log-level={{ lethean_log_level }}"
+    state: present
+    configuration: |
+      autostart=true
+      autorestart=true
+      startretries=1
+      startsecs=1
+      redirect_stderr=true
+      stderr_logfile=/var/log/lthn-legacy-chain-err.log
+      stdout_logfile=/var/log/lthn-legacy-chain.log
+      user=root
+      killasgroup=true
+      stopasgroup=true
+
+logrotate_entries:
+  - name: Lethean Logrotate
+    path: "/var/log/lthn*.log"
+    copytruncate: yes
